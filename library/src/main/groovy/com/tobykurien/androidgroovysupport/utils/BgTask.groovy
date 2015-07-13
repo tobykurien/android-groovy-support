@@ -2,6 +2,7 @@ package com.tobykurien.androidgroovysupport.utils
 
 import android.os.AsyncTask
 import android.os.Build
+import android.util.Log
 import groovy.transform.CompileStatic
 import groovy.transform.stc.ClosureParams
 import groovy.transform.stc.FirstParam
@@ -45,12 +46,22 @@ class BgTask<T> extends AsyncTask<Object, Void, T> {
     @Override
     protected void onPostExecute(T result) {
         if (error != null) {
-            if (!isCancelled() && onError != null) onError(error)
+            if (!isCancelled() && onError != null) try {
+                onError(error)
+            } catch (Exception e) {
+                // ignore
+                Log.e("BgTask", "Error executing error closure", e)
+            }
         } else if (!isCancelled()) {
             try {
                 if(onUi != null) onUi(result)
             } catch (Exception e) {
-                if (onError != null) onError(e)
+                if (onError != null) try {
+                    onError(e)
+                } catch (Exception e2) {
+                    // ignore
+                    Log.e("BgTask", "Error executing error closure", e2)
+                }
             }
         }
     }

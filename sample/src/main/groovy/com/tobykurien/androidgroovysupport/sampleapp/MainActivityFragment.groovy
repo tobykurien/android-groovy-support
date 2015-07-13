@@ -17,23 +17,28 @@ class MainActivityFragment extends Fragment implements AlertUtils {
     }
 
     @Override
-    void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState)
+    void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState)
 
-        view.findViewById(R.id.btnExit).onClickListener = {v ->
+        def button = view.findViewById(R.id.btnExit)
+        button.enabled = false
+        button.onClickListener = {v ->
             confirm("Are you sure you want to exit?") {
-                toast("ok, bye!")
-                finish()
+                activity.finish()
             }
         }
 
-        // run a background task
+        // run a background task that returns a string
         new BgTask<String>().runInBg({
+            // This runs in a background thread
             Thread.sleep(5_000)
             return "Back from background thread"
         }, { result ->
+            // This runs in the UI thread
+            button.enabled = true
             toast(result)
         }, { error ->
+            // This runs in the UI thread if an error occurs during background processing
             toast(error.message)
         })
     }
