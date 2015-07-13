@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.tobykurien.androidgroovysupport.utils.AlertUtils
 import com.tobykurien.androidgroovysupport.utils.BgTask
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class MainActivityFragment extends Fragment implements AlertUtils {
     @Override
     View onCreateView(LayoutInflater inflater,
