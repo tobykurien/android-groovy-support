@@ -7,12 +7,12 @@ A support library to leverage Android development using Groovy. This is an attem
 Implementing the ```AlertUtils``` trait allows you to write this:
 
 ```groovy
-        view.findViewById(R.id.btnExit).onClickListener = {v ->
-            confirm("Are you sure you want to exit?") {
-                toast("ok, bye!")
-                finish()
-            }
+    view.findViewById(R.id.btnExit).onClickListener = {v ->
+        confirm("Are you sure you want to exit?") {
+            toast("ok, bye!")
+            finish()
         }
+    }
 ```
 
 # BgTask
@@ -20,19 +20,19 @@ Implementing the ```AlertUtils``` trait allows you to write this:
 The BgTask class allows easy use of Android's ```AsyncTask``` using Groovy's closures:
 
 ```groovy
-        // run a background task
-        new BgTask<String>().runInBg({
-            Thread.sleep(5_000)
-            return "Back from background thread"
-        }, { result ->
-            toast(result)
-        }, { error ->
-            toast(error.message)
-        })
+    // run a background task
+    new BgTask<String>().runInBg({
+        Thread.sleep(5_000)
+        return "Back from background thread"
+    }, { result ->
+        toast(result)
+    }, { error ->
+        toast(error.message)
+    })
 ```
 
-BgTask takes care of running each closure in the correct thread, handling errors, and aborting the UI thread closures if the task has been cancelled (e.g. when detached by orientation change).
+BgTask takes care of running each closure in the correct thread, handling errors, and aborting the UI thread closures if the task has been cancelled.
 
 More to come...
 
-    Xtendroid: https://github.com/tobykurien/Xtendroid
+   [Xtendroid]: https://github.com/tobykurien/Xtendroid
