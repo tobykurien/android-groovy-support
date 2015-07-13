@@ -31,6 +31,8 @@ The BgTask class allows easy use of Android's ```AsyncTask``` using Groovy's clo
         })
 ```
 
+BgTask takes care of running each closure in the correct thread, handling errors, and aborting the UI thread closures if the task has been cancelled (e.g. when detached by orientation change).
+
 More to come...
 
-   xtendroid: https://github.com/tobykurien/Xtendroid
+    Xtendroid: https://github.com/tobykurien/Xtendroid
