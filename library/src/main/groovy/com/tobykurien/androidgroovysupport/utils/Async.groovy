@@ -25,15 +25,14 @@ public class Async<Result, Progress> extends AsyncTask<Object, Progress, Result>
     private Closure<Void> error
     private Closure<Void> cancelledClosure
     private Closure progress
-    boolean skipPostExecute = false
+    Exception exception
 
     @Override
     protected Result doInBackground(Object... params) {
         if (request) try {
             return request(params)
         } catch (Exception e) {
-            skipPostExecute = true
-            onError(e)
+            exception = e
             return null
         }
     }
@@ -44,19 +43,23 @@ public class Async<Result, Progress> extends AsyncTask<Object, Progress, Result>
             try {
                 first()
             } catch (Exception e) {
-                onError(e)
+                exception = e
             }
         }
     }
 
     @Override
     protected void onPostExecute(Result result) {
-        if (continueTask() && !skipPostExecute && then) {
+        if (continueTask() && exception == null && then) {
             try {
                 then(result)
             } catch (Exception e) {
-                onError(e)
+                exception = e
             }
+        }
+
+        if (exception != null) {
+            onError(exception)
         }
     }
 
@@ -66,7 +69,7 @@ public class Async<Result, Progress> extends AsyncTask<Object, Progress, Result>
             try {
                 progress.call(values.asType(progress.getParameterTypes().first()))
             } catch (Exception e) {
-                onError(e)
+                exception = e
             }
         }
     }
@@ -77,7 +80,7 @@ public class Async<Result, Progress> extends AsyncTask<Object, Progress, Result>
             try {
                 cancelledClosure(result)
             } catch (Exception e) {
-                onError(e)
+                exception = e
             }
         }
     }
@@ -88,7 +91,7 @@ public class Async<Result, Progress> extends AsyncTask<Object, Progress, Result>
             try {
                 cancelledClosure()
             } catch (Exception e) {
-                onError(e)
+                exception = e
             }
         }
     }
@@ -106,10 +109,10 @@ public class Async<Result, Progress> extends AsyncTask<Object, Progress, Result>
             try {
                 error(e)
             } catch (Exception e2) {
-                Log.e("Async", "Error executing error closure", e2)
+                throw e2
             }
         } else {
-            Log.e("Async", "Error executing AsyncTask", e)
+            throw e
         }
     }
 
@@ -158,7 +161,7 @@ public class Async<Result, Progress> extends AsyncTask<Object, Progress, Result>
         }
 
         AsyncTask<Object, Progress, Result> execute(Object... params) {
-            task.skipPostExecute = false
+            task.exception = null
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
                 // newer versions of Android use a single thread, rather default to multiple threads
                 task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, params)

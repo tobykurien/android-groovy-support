@@ -3,7 +3,6 @@ package com.tobykurien.androidgroovysupport.sampleapp
 import android.os.Bundle
 import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,7 @@ import android.widget.TextView
 import com.tobykurien.androidgroovysupport.db.DbService
 import com.tobykurien.androidgroovysupport.sampleapp.model.Webapp
 import com.tobykurien.androidgroovysupport.utils.AlertUtils
-import com.tobykurien.androidgroovysupport.utils.BgTask
+import com.tobykurien.androidgroovysupport.utils.Async
 import groovy.transform.CompileStatic
 
 @CompileStatic
@@ -35,16 +34,18 @@ class MainActivityFragment extends Fragment implements AlertUtils {
         }
 
         def textview = view.findViewById(R.id.textview) as TextView
-        // run a background task that returns a string
-        new BgTask<List<Webapp>>().runInBg({
-            // This runs in a background thread
+        Async.background {
+            // This closure runs in a background thread, all other closures run in UI thread
             Thread.sleep(2_000)
 
             // Database sample:
             def db = DbService.getInstance(activity, "test", 1)
             return db.findAll("webapps", "name", Webapp)
-        }, { result ->
-            // This runs in the UI thread
+        } first {
+            // this runs before the background task in the UI thread
+            textview.setText("Loading database entries...")
+        } then { List<Webapp> result ->
+            // This runs in the UI thread after the background task
             button.enabled = true
 
             // show db results in textview
@@ -53,9 +54,9 @@ class MainActivityFragment extends Fragment implements AlertUtils {
                 sb.append("\r\n ${w.name}: ${w.url}")
             }
             textview.setText(sb.toString())
-        }, { error ->
-            // This runs in the UI thread if an error occurs during background processing
-            toast(error.message)
-        })
+        } onError { error ->
+            // This runs if an error occurs in any closure
+            toast("ERROR! ${error.class.name} ${error.message}")
+        } execute()
     }
 }
