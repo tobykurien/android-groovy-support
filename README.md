@@ -118,7 +118,7 @@ adults = db.findByFields("users", [ 'age <=': 18 ], "age desc",
     5, 5, User)
 
 // insert a record
-var johnId = db.insert("users", [
+def johnId = db.insert("users", [
    firstName: 'John',
    lastName: 'Doe',
    age: 43
