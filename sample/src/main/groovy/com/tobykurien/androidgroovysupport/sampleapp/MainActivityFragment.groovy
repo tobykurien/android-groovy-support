@@ -27,7 +27,7 @@ class MainActivityFragment extends Fragment implements AlertUtils {
 
         def button = view.findViewById(R.id.btnExit)
         button.enabled = false
-        button.onClickListener = {v ->
+        button.onClickListener = { v ->
             confirm("Are you sure you want to exit?") {
                 activity.finish()
             }
@@ -58,5 +58,13 @@ class MainActivityFragment extends Fragment implements AlertUtils {
             // This runs if an error occurs in any closure
             toast("ERROR! ${error.class.name} ${error.message}")
         } execute()
+
+        def settings = Settings.getSettings(activity)
+        if (settings.token == null) {
+            toast("Creating new token")
+            settings.token = UUID.randomUUID()
+        } else {
+            toast("Found token ${settings.token}")
+        }
     }
 }

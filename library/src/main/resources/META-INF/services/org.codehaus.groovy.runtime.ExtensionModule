@@ -1,0 +1,3 @@
+moduleName=time-module
+moduleVersion=0.1-alpha
+extensionClasses=com.tobykurien.androidgroovysupport.extensions.TimeExtensions
