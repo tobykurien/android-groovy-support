@@ -1,3 +1,3 @@
-moduleName=time-module
+moduleName=groovy-support-module
 moduleVersion=0.1-alpha
-extensionClasses=com.tobykurien.androidgroovysupport.extensions.TimeExtensions
+extensionClasses=com.tobykurien.androidgroovysupport.extensions.TimeExtensions,com.tobykurien.androidgroovysupport.extensions.ActivityExtensions
