@@ -2,17 +2,30 @@
 
 A support library to leverage Android development using Groovy. This is an attempt to port the features of [Xtendroid][] to Groovy. In order to maintain performance, ```@CompileStatic``` is used to ensure that the Groovy code is statically compiled, rather than being run dynamically.
 
-# AlertUtils
+# Activity and Fragment extensions
 
-Implementing the ```AlertUtils``` trait allows you to write this:
+The ```toast```, ```toastShort```, and ```confirm``` methods are appended to Activities and Fragments as an extension, allowing you to write code such as:
 
 ```groovy
-    view.findViewById(R.id.btnExit).onClickListener = {v ->
+    findViewById(R.id.btnExit).onClickListener = {v ->
         confirm("Are you sure you want to exit?") {
             toast("ok, bye!")
             finish()
         }
     }
+```
+
+# Time extensions
+
+The time extensions make it easier to work with ```java.util.Date``` objects, as in the example below:
+
+```groovy
+var Date yesterday = 24.hours().ago()
+var Date tomorrow = 24.hours().fromNow()
+var Date futureDate = now + 48.days() + 20.hours() + 2.seconds()
+if (futureDate - now() < 24.hours()) {
+    // we are in the future!
+}
 ```
 
 # Async
