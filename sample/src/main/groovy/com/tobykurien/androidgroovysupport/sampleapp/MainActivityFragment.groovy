@@ -14,7 +14,7 @@ import com.tobykurien.androidgroovysupport.utils.Async
 import groovy.transform.CompileStatic
 
 @CompileStatic
-class MainActivityFragment extends Fragment implements AlertUtils {
+class MainActivityFragment extends Fragment {
     @Override
     View onCreateView(LayoutInflater inflater,
                       @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -33,10 +33,18 @@ class MainActivityFragment extends Fragment implements AlertUtils {
             }
         }
 
+        def settings = Settings.getSettings(activity)
+        if (settings.token == null) {
+            toast("Creating new token")
+            settings.token = UUID.randomUUID()
+        } else {
+            toast("Found token ${settings.token}")
+        }
+
         def textview = view.findViewById(R.id.textview) as TextView
         Async.background {
             // This closure runs in a background thread, all other closures run in UI thread
-            Thread.sleep(2_000)
+            Thread.sleep(2.seconds())
 
             // Database sample:
             def db = DbService.getInstance(activity, "test", 1)
@@ -56,15 +64,7 @@ class MainActivityFragment extends Fragment implements AlertUtils {
             textview.setText(sb.toString())
         } onError { error ->
             // This runs if an error occurs in any closure
-            toast("ERROR! ${error.class.name} ${error.message}")
+            activity.toast("ERROR! ${error.class.name} ${error.message}")
         } execute()
-
-        def settings = Settings.getSettings(activity)
-        if (settings.token == null) {
-            toast("Creating new token")
-            settings.token = UUID.randomUUID()
-        } else {
-            toast("Found token ${settings.token}")
-        }
     }
 }

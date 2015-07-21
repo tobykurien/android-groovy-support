@@ -2,10 +2,12 @@ package com.tobykurien.androidgroovysupport.sampleapp
 
 import android.content.Context
 import com.tobykurien.androidgroovysupport.utils.BasePreferences
+import groovy.transform.CompileStatic
 
 /**
  * Class to save and read shared preferences
  */
+@CompileStatic
 class Settings extends BasePreferences {
     private String token = null
 
@@ -14,10 +16,10 @@ class Settings extends BasePreferences {
     }
 
     String getToken() {
-        return getProperty("token")
+        return pref.getString("token", token)
     }
 
     void setToken(String token) {
-        setProperty("token", token)
+        pref.edit().putString("token", token).commit()
     }
 }
