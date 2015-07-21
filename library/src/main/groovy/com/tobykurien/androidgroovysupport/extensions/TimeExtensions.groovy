@@ -49,7 +49,7 @@ class TimeExtensions {
         return new Date(System.currentTimeMillis() + self)
     }
 
-    static Date now(Number self) {
+    static Date now(Object self) {
         return new Date(System.currentTimeMillis())
     }
 
