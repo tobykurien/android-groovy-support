@@ -51,5 +51,4 @@ class ActivityExtensions {
                 .create()
                 .show()
     }
-
 }
