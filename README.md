@@ -20,9 +20,9 @@ The ```toast```, ```toastShort```, and ```confirm``` methods are appended to Act
 The time extensions make it easier to work with ```java.util.Date``` objects, as in the example below:
 
 ```groovy
-var Date yesterday = 24.hours().ago()
-var Date tomorrow = 24.hours().fromNow()
-var Date futureDate = now + 48.days() + 20.hours() + 2.seconds()
+def yesterday = 24.hours().ago()
+def tomorrow = 24.hours().fromNow()
+def futureDate = now + 48.days() + 20.hours() + 2.seconds()
 if (futureDate - now() < 24.hours()) {
     // we are in the future!
 }
