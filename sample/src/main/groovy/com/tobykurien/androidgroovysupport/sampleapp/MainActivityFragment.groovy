@@ -1,5 +1,6 @@
 package com.tobykurien.androidgroovysupport.sampleapp
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.annotation.Nullable
 import android.support.v4.app.Fragment
@@ -14,6 +15,8 @@ import groovy.transform.CompileStatic
 
 @CompileStatic
 class MainActivityFragment extends Fragment {
+    List<AsyncTask> tasks = []
+
     @Override
     View onCreateView(LayoutInflater inflater,
                       @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -41,7 +44,7 @@ class MainActivityFragment extends Fragment {
         }
 
         def textview = view.findViewById(R.id.textview) as TextView
-        Async.background {
+        def task = Async.background {
             // This closure runs in a background thread, all other closures run in UI thread
             Thread.sleep(2.seconds())
 
@@ -65,5 +68,12 @@ class MainActivityFragment extends Fragment {
             // This runs if an error occurs in any closure
             activity.toast("ERROR! ${error.class.name} ${error.message}")
         } execute()
+        tasks.add(task)
+    }
+
+    @Override
+    void onDestroy() {
+        tasks.each { it.cancel(true) }
+        super.onDestroy()
     }
 }
