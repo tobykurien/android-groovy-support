@@ -1,5 +1,8 @@
 package com.tobykurien.androidgroovysupport.extensions
 
+import groovy.transform.CompileStatic
+
+@CompileStatic
 class TimeExtensions {
     static Long second(Number self) {
         seconds(self)

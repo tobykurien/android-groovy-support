@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.tobykurien.androidgroovysupport.db.DbService
 import com.tobykurien.androidgroovysupport.sampleapp.model.Webapp
-import com.tobykurien.androidgroovysupport.utils.AlertUtils
+
 import com.tobykurien.androidgroovysupport.utils.Async
 import groovy.transform.CompileStatic
 

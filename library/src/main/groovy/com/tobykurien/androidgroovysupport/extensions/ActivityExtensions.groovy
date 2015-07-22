@@ -5,7 +5,9 @@ import android.app.AlertDialog
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.widget.Toast
+import groovy.transform.CompileStatic
 
+@CompileStatic
 class ActivityExtensions {
     static void toastShort(Context self, String message) {
         toastMessage(self, message, Toast.LENGTH_SHORT)
